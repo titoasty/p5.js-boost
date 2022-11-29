@@ -140,6 +140,7 @@ void totalLight(
   totalSpecular *= specularFactor;
 }
 
+uniform float uFogEnabled;
 uniform vec3 uFogColor;
 uniform float uFogStart;
 uniform float uFogEnd;
@@ -175,7 +176,9 @@ void main(void) {
                     uEmissiveMatColor.rgb;
 
     // fog
-    float fogDistance = gl_FragCoord.z / gl_FragCoord.w;
-    float fogAmount = fog_linear(fogDistance, uFogStart, uFogEnd);
-    gl_FragColor.rgb = mix(gl_FragColor.rgb, uFogColor, fogAmount);
+    if(uFogEnabled > 0.5) {
+      float fogDistance = gl_FragCoord.z / gl_FragCoord.w;
+      float fogAmount = fog_linear(fogDistance, uFogStart, uFogEnd);
+      gl_FragColor.rgb = mix(gl_FragColor.rgb, uFogColor, fogAmount);
+    }
 }

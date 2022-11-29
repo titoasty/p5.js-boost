@@ -11,9 +11,10 @@ const includeFiles = [
     'particlesystem.js',
     'shaders.js',
     'shapes.js',
+    'init.js',
 ];
 
-const outputFile = 'framework.js';
+const outputFile = 'p5.boost.js';
 
 let str = '';
 for (const id in includeStrings) {

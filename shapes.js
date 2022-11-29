@@ -7,7 +7,11 @@ class Shape3D {
         this.rotation = createVector();
         this.scale = createVector(1, 1, 1);
         this.fill = color(255, 255, 255);
-        this.stroke = color(0, 0, 0);
+        this.stroke = null;
+        this.ambientArgs = undefined;
+        this.emissiveArgs = undefined;
+        this.specularArgs = undefined;
+        this.shininessValue = 0;
         this.strokeWeight = 1;
     }
 
@@ -19,16 +23,43 @@ class Shape3D {
         this.stroke = null;
     }
 
+    ambientMaterial() {
+        this.ambientArgs = Array.from(arguments);
+    }
+
+    emissiveMaterial() {
+        this.emissiveArgs = Array.from(arguments);
+    }
+
+    specularMaterial() {
+        this.specularArgs = Array.from(arguments);
+    }
+
+    shininess(value) {
+        this.shininessValue = value;
+    }
+
     render() {
         push();
 
-        if (this.fill) fill(this.fill);
-        else noFill();
+        if (this.fill) {
+            fill(this.fill);
+        } else {
+            noFill();
+        }
 
-        if (this.stroke) stroke(this.stroke);
-        else noStroke();
+        if (this.stroke) {
+            stroke(this.stroke);
+            strokeWeight(this.strokeWeight);
+        } else {
+            noStroke();
+        }
 
-        strokeWeight(this.strokeWeight);
+        // material
+        if (this.ambientArgs) ambientMaterial.apply(ambientMaterial, this.ambientArgs);
+        if (this.emissiveArgs) emissiveMaterial.apply(emissiveMaterial, this.emissiveArgs);
+        if (this.specularArgs) specularMaterial.apply(specularMaterial, this.specularArgs);
+        shininess(this.shininessValue);
 
         translate(this.position.x, this.position.y, this.position.z);
 

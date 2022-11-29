@@ -182,6 +182,7 @@ void totalLight(
   totalSpecular *= specularFactor;
 }
 
+uniform float uFogEnabled;
 uniform vec3 uFogColor;
 uniform float uFogStart;
 uniform float uFogEnd;
@@ -217,9 +218,11 @@ void main(void) {
                     uEmissiveMatColor.rgb;
 
     // fog
-    float fogDistance = gl_FragCoord.z / gl_FragCoord.w;
-    float fogAmount = fog_linear(fogDistance, uFogStart, uFogEnd);
-    gl_FragColor.rgb = mix(gl_FragColor.rgb, uFogColor, fogAmount);
+    if(uFogEnabled > 0.5) {
+      float fogDistance = gl_FragCoord.z / gl_FragCoord.w;
+      float fogAmount = fog_linear(fogDistance, uFogStart, uFogEnd);
+      gl_FragColor.rgb = mix(gl_FragColor.rgb, uFogColor, fogAmount);
+    }
 }
 `
 
@@ -228,12 +231,13 @@ void main(void) {
 const _easing_c1 = 1.70158;
 const _easing_c2 = _easing_c1 * 1.525;
 const _easing_c3 = _easing_c1 + 1;
-const _easing_c4 = (2 * PI) / 3;
-const _easing_c5 = (2 * PI) / 4.5;
+const _easing_c4 = (2 * Math.PI) / 3;
+const _easing_c5 = (2 * Math.PI) / 4.5;
 
 function linear(x) {
     return x;
 }
+
 function easeInQuad(x) {
     return x * x;
 }
@@ -243,6 +247,7 @@ function easeOutQuad(x) {
 function easeInOutQuad(x) {
     return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
 }
+
 function easeInCubic(x) {
     return x * x * x;
 }
@@ -252,6 +257,7 @@ function easeOutCubic(x) {
 function easeInOutCubic(x) {
     return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
 }
+
 function easeInQuart(x) {
     return x * x * x * x;
 }
@@ -261,6 +267,7 @@ function easeOutQuart(x) {
 function easeInOutQuart(x) {
     return x < 0.5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2;
 }
+
 function easeInQuint(x) {
     return x * x * x * x * x;
 }
@@ -270,15 +277,17 @@ function easeOutQuint(x) {
 function easeInOutQuint(x) {
     return x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2;
 }
+
 function easeInSine(x) {
-    return 1 - Math.cos((x * PI) / 2);
+    return 1 - Math.cos((x * Math.PI) / 2);
 }
 function easeOutSine(x) {
-    return Math.sin((x * PI) / 2);
+    return Math.sin((x * Math.PI) / 2);
 }
 function easeInOutSine(x) {
-    return -(Math.cos(PI * x) - 1) / 2;
+    return -(Math.cos(Math.PI * x) - 1) / 2;
 }
+
 function easeInExpo(x) {
     return x === 0 ? 0 : Math.pow(2, 10 * x - 10);
 }
@@ -288,6 +297,7 @@ function easeOutExpo(x) {
 function easeInOutExpo(x) {
     return x === 0 ? 0 : x === 1 ? 1 : x < 0.5 ? Math.pow(2, 20 * x - 10) / 2 : (2 - Math.pow(2, -20 * x + 10)) / 2;
 }
+
 function easeInCirc(x) {
     return 1 - sqrt(1 - Math.pow(x, 2));
 }
@@ -297,6 +307,7 @@ function easeOutCirc(x) {
 function easeInOutCirc(x) {
     return x < 0.5 ? (1 - sqrt(1 - Math.pow(2 * x, 2))) / 2 : (sqrt(1 - Math.pow(-2 * x + 2, 2)) + 1) / 2;
 }
+
 function easeInBack(x) {
     return _easing_c3 * x * x * x - _easing_c1 * x * x;
 }
@@ -306,6 +317,7 @@ function easeOutBack(x) {
 function easeInOutBack(x) {
     return x < 0.5 ? (Math.pow(2 * x, 2) * ((_easing_c2 + 1) * 2 * x - _easing_c2)) / 2 : (Math.pow(2 * x - 2, 2) * ((_easing_c2 + 1) * (x * 2 - 2) + _easing_c2) + 2) / 2;
 }
+
 function easeInElastic(x) {
     return x === 0 ? 0 : x === 1 ? 1 : -Math.pow(2, 10 * x - 10) * Math.sin((x * 10 - 10.75) * _easing_c4);
 }
@@ -315,12 +327,9 @@ function easeOutElastic(x) {
 function easeInOutElastic(x) {
     return x === 0 ? 0 : x === 1 ? 1 : x < 0.5 ? -(Math.pow(2, 20 * x - 10) * Math.sin((20 * x - 11.125) * _easing_c5)) / 2 : (Math.pow(2, -20 * x + 10) * Math.sin((20 * x - 11.125) * _easing_c5)) / 2 + 1;
 }
-function easeInBounce(x) {
-    return 1 - bounceOut(1 - x);
-}
-function easeOutBunceOut(x) {
+
+function easeOutBounce(x) {
     const n1 = 7.5625;
-    EaMath.sing.c5;
     const d1 = 2.75;
 
     if (x < 1 / d1) {
@@ -333,8 +342,11 @@ function easeOutBunceOut(x) {
         return n1 * (x -= 2.625 / d1) * x + 0.984375;
     }
 }
+function easeInBounce(x) {
+    return 1 - easeOutBounce(1 - x);
+}
 function easeInOutBounce(x) {
-    return x < 0.5 ? (1 - bounceOut(1 - 2 * x)) / 2 : (1 + bounceOut(2 * x - 1)) / 2;
+    return x < 0.5 ? (1 - easeOutBounce(1 - 2 * x)) / 2 : (1 + easeOutBounce(2 * x - 1)) / 2;
 }
 
 
@@ -453,21 +465,23 @@ function createParticleSystem(delayMin, delayMax) {
 let phongShader;
 
 function initShaders(renderer) {
-    phongShader = loadShader(phongVert, phongFrag);
+    phongShader = createShader(phongVert, phongFrag);
     phongShader.isLightShader = function () {
         return true;
     };
-    //shader(phongShader);
-}
-
-function applyShaders() {
-    shader(phongShader);
+    
+    renderer._defaultLightShader = phongShader;
 }
 
 function fog(r, g, b, start, end) {
+    phongShader.setUniform('uFogEnabled', 1.0);
     phongShader.setUniform('uFogColor', [r / 255, g / 255, b / 255]);
     phongShader.setUniform('uFogStart', start);
     phongShader.setUniform('uFogEnd', end);
+}
+
+function disableFog() {
+    phongShader.setUniform('uFogEnabled', 0.0);
 }
 
 
@@ -482,7 +496,11 @@ class Shape3D {
         this.rotation = createVector();
         this.scale = createVector(1, 1, 1);
         this.fill = color(255, 255, 255);
-        this.stroke = color(0, 0, 0);
+        this.stroke = null;
+        this.ambientArgs = undefined;
+        this.emissiveArgs = undefined;
+        this.specularArgs = undefined;
+        this.shininessValue = 0;
         this.strokeWeight = 1;
     }
 
@@ -494,16 +512,43 @@ class Shape3D {
         this.stroke = null;
     }
 
+    ambientMaterial() {
+        this.ambientArgs = Array.from(arguments);
+    }
+
+    emissiveMaterial() {
+        this.emissiveArgs = Array.from(arguments);
+    }
+
+    specularMaterial() {
+        this.specularArgs = Array.from(arguments);
+    }
+
+    shininess(value) {
+        this.shininessValue = value;
+    }
+
     render() {
         push();
 
-        if (this.fill) fill(this.fill);
-        else noFill();
+        if (this.fill) {
+            fill(this.fill);
+        } else {
+            noFill();
+        }
 
-        if (this.stroke) stroke(this.stroke);
-        else noStroke();
+        if (this.stroke) {
+            stroke(this.stroke);
+            strokeWeight(this.strokeWeight);
+        } else {
+            noStroke();
+        }
 
-        strokeWeight(this.strokeWeight);
+        // material
+        if (this.ambientArgs) ambientMaterial.apply(ambientMaterial, this.ambientArgs);
+        if (this.emissiveArgs) emissiveMaterial.apply(emissiveMaterial, this.emissiveArgs);
+        if (this.specularArgs) specularMaterial.apply(specularMaterial, this.specularArgs);
+        shininess(this.shininessValue);
 
         translate(this.position.x, this.position.y, this.position.z);
 
@@ -599,6 +644,21 @@ class Cylinder extends Shape3D {
 
 function createCylinder(radius = 100, height = 100, detailX = 24, detailY = 1, bottomCap = true, topCap = true) {
     return new Cylinder(radius, height, detailX, detailY, bottomCap, topCap);
+}
+
+
+// init.js
+
+function setupBoost(renderer) {
+    initShaders(renderer);
+
+    // backface culling
+    renderer.drawingContext.enable(renderer.drawingContext.CULL_FACE);
+    renderer.drawingContext.cullFace(renderer.drawingContext.FRONT);
+
+    angleMode(DEGREES);
+
+    return renderer;
 }
 
 
