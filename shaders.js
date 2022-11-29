@@ -1,7 +1,7 @@
 let phongShader;
 
 function initShaders(renderer) {
-    phongShader = loadShader('assets/shaders/phong.vert', 'assets/shaders/phong.frag');
+    phongShader = loadShader(phongVert, phongFrag);
     phongShader.isLightShader = function () {
         return true;
     };

@@ -1,6 +1,5 @@
 // assets/shaders/phong.vert
-
-precision highp float;
+const phongVert = `precision highp float;
 //precision highp int;
 
 attribute vec3 aPosition;
@@ -38,10 +37,10 @@ void main() {
         }
     }
 }
+`
 
 // assets/shaders/phong.frag
-
-precision highp float;
+const phongFrag = `precision highp float;
 //precision highp int;
 
 uniform mat4 uViewMatrix;
@@ -222,6 +221,7 @@ void main(void) {
     float fogAmount = fog_linear(fogDistance, uFogStart, uFogEnd);
     gl_FragColor.rgb = mix(gl_FragColor.rgb, uFogColor, fogAmount);
 }
+`
 
 // easings.js
 
@@ -337,6 +337,7 @@ function easeInOutBounce(x) {
     return x < 0.5 ? (1 - bounceOut(1 - 2 * x)) / 2 : (1 + bounceOut(2 * x - 1)) / 2;
 }
 
+
 // mathutils.js
 
 function randomDir(power = 0, baseDir) {
@@ -355,6 +356,7 @@ function randomDir(power = 0, baseDir) {
 
     return createVector(lerp(baseDir.x, x, power), lerp(baseDir.y, y, power), lerp(baseDir.z, z, power));
 }
+
 
 // particlesystem.js
 
@@ -445,12 +447,13 @@ function createParticleSystem(delayMin, delayMax) {
     return new ParticleSystem(delayMin, delayMax);
 }
 
+
 // shaders.js
 
 let phongShader;
 
 function initShaders(renderer) {
-    phongShader = loadShader('assets/shaders/phong.vert', 'assets/shaders/phong.frag');
+    phongShader = loadShader(phongVert, phongFrag);
     phongShader.isLightShader = function () {
         return true;
     };
@@ -466,6 +469,7 @@ function fog(r, g, b, start, end) {
     phongShader.setUniform('uFogStart', start);
     phongShader.setUniform('uFogEnd', end);
 }
+
 
 // shapes.js
 
@@ -596,3 +600,5 @@ class Cylinder extends Shape3D {
 function createCylinder(radius = 100, height = 100, detailX = 24, detailY = 1, bottomCap = true, topCap = true) {
     return new Cylinder(radius, height, detailX, detailY, bottomCap, topCap);
 }
+
+

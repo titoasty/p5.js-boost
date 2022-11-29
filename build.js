@@ -1,9 +1,12 @@
 const fs = require('fs');
 
+const includeStrings = {
+    phongVert: 'assets/shaders/phong.vert', //
+    phongFrag: 'assets/shaders/phong.frag',
+};
+
 const includeFiles = [
-    'assets/shaders/phong.vert', //
-    'assets/shaders/phong.frag',
-    'easings.js',
+    'easings.js', //
     'mathutils.js',
     'particlesystem.js',
     'shaders.js',
@@ -12,4 +15,14 @@ const includeFiles = [
 
 const outputFile = 'framework.js';
 
-fs.writeFileSync(outputFile, includeFiles.map((file) => '// ' + file + '\n\n' + fs.readFileSync(file, 'utf-8')).join('\n'));
+let str = '';
+for (const id in includeStrings) {
+    const file = includeStrings[id];
+    str += `// ${file}\nconst ${id} = \`${fs.readFileSync(file)}\`\n\n`;
+}
+
+for (const file of includeFiles) {
+    str += `// ${file}\n\n${fs.readFileSync(file, 'utf-8')}\n\n`;
+}
+
+fs.writeFileSync(outputFile, str);
