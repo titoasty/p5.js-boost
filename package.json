@@ -1,0 +1,12 @@
+{
+  "name": "p5.js-boost",
+  "version": "0.1.0",
+  "author": "Nicolas Bouvet",
+  "license": "MIT",
+  "scripts": {
+    "build": "node build.js && minify p5.boost.js > p5.boost.min.js"
+  },
+  "devDependencies": {
+    "minify": "^9.1.0"
+  }
+}

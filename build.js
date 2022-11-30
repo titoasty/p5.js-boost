@@ -1,17 +1,18 @@
 const fs = require('fs');
 
 const includeStrings = {
-    phongVert: 'assets/shaders/phong.vert', //
-    phongFrag: 'assets/shaders/phong.frag',
+    phongVert: 'assets/shaders/phongFog.vert', //
+    phongFrag: 'assets/shaders/phongFog.frag',
 };
 
 const includeFiles = [
+    'thirdparty/p5.Framebuffer.js',
     'easings.js', //
     'mathutils.js',
     'particlesystem.js',
-    'shaders.js',
+    'fog.js',
     'shapes.js',
-    'init.js',
+    'setup.js',
 ];
 
 const outputFile = 'p5.boost.js';

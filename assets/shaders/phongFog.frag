@@ -176,9 +176,7 @@ void main(void) {
                     uEmissiveMatColor.rgb;
 
     // fog
-    if(uFogEnabled > 0.5) {
-      float fogDistance = gl_FragCoord.z / gl_FragCoord.w;
-      float fogAmount = fog_linear(fogDistance, uFogStart, uFogEnd);
-      gl_FragColor.rgb = mix(gl_FragColor.rgb, uFogColor, fogAmount);
-    }
+    float fogDistance = gl_FragCoord.z / gl_FragCoord.w;
+    float fogAmount = fog_linear(fogDistance, uFogStart, uFogEnd);
+    gl_FragColor.rgb = mix(gl_FragColor.rgb, uFogColor, fogAmount*uFogEnabled);
 }
