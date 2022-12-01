@@ -4,9 +4,13 @@
   "author": "Nicolas Bouvet",
   "license": "MIT",
   "scripts": {
-    "build": "node build.js && minify p5.boost.js > p5.boost.min.js"
+    "build": "node build.js && minify p5.boost.js > p5.boost.min.js",
+    "generate-docs": "jsdoc --configure jsdoc.json"
   },
   "devDependencies": {
-    "minify": "^9.1.0"
+    "clean-jsdoc-theme": "^4.1.9",
+    "jsdoc": "^4.0.0",
+    "minify": "^9.1.0",
+    "taffydb": "^2.7.3"
   }
 }

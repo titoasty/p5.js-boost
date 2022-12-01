@@ -1,3 +1,8 @@
+/**
+ * Setup Boost library.
+ * Call it once in setup()
+ * @function setupBoost
+ */
 p5.prototype.setupBoost = function () {
     const renderer = this._renderer;
 
